@@ -38,7 +38,6 @@ function App() {
     guess.guess.toUpperCase() === word ? setVictory(true) : setVictory = false
     guessCounter++
     setGuessCounter(guessCounter)
-    setGuess({guess: ""})
   }
 
   return (
@@ -47,7 +46,7 @@ function App() {
       {victory === false ?
         (<form onSubmit={handleSubmit}>
       <div>
-        <label>Guess:</label>
+        <label>Guess: </label>
         <input
           type="text"
           name="guess"
