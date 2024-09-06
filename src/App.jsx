@@ -1,46 +1,66 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useState, useEffect } from 'react'
 import './App.css'
 import words from "./data/words.json"
 
 function App() {
-  const [count, setCount] = useState(0)
-  let scrambledWord
-  let numberWord = Math.floor(Math.random() * words.length)
+  const [guess, setGuess] = useState({
+    guess: '',
+  });
 
-  const word = words[numberWord].toUpperCase()
-  console.log(word)
+  let [guessCounter, setGuessCounter] = useState(0)
 
-  const scrambler = () => {
-    scrambledWord = word.split("").sort(() => Math.random() - 0.5).join("")
+  const [scrambledWord, setScrambledWord] = useState('')
+  const [word, setWord] = useState('')
+  let [victory, setVictory] = useState(false)
+
+  useEffect(() => {
+    let numberWord = Math.floor(Math.random() * words.length)
+    const word = words[numberWord].toUpperCase()
+    setWord(word)
+
+    const scrambler = (word) => {
+      return word.split('').sort(() => Math.random() - 0.5).join('')
+    };
+
+    setScrambledWord(scrambler(word))
+  }, []);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target
+    setGuess((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    guess.guess.toUpperCase() === word ? setVictory(true) : setVictory = false
+    guessCounter++
+    setGuessCounter(guessCounter)
+    setGuess({guess: ""})
   }
-  scrambler()
-  console.log(scrambledWord)
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
       <h1>{scrambledWord}</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
+      {victory === false ?
+        (<form onSubmit={handleSubmit}>
+      <div>
+        <label>Guess:</label>
+        <input
+          type="text"
+          name="guess"
+          value={guess.guess}
+          onChange={handleChange}
+          required
+        />
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <button type="submit">Submit</button>
+      </form>) : <div></div>}
+    {victory === true ? (<div>You win! The answer was {guess.guess.toUpperCase()}</div>) : <div></div>}
+    {victory === false && guessCounter > 0 ? (<div>Incorrect! Keep going!</div>) : <div></div>}
+    <div>Guess Count: {guessCounter}</div>
     </>
   )
 }
