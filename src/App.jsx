@@ -2,9 +2,21 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
+import words from "./data/words.json"
 
 function App() {
   const [count, setCount] = useState(0)
+  let scrambledWord
+  let numberWord = Math.floor(Math.random() * words.length)
+
+  const word = words[numberWord].toUpperCase()
+  console.log(word)
+
+  const scrambler = () => {
+    scrambledWord = word.split("").sort(() => Math.random() - 0.5).join("")
+  }
+  scrambler()
+  console.log(scrambledWord)
 
   return (
     <>
@@ -17,6 +29,7 @@ function App() {
         </a>
       </div>
       <h1>Vite + React</h1>
+      <h1>{scrambledWord}</h1>
       <div className="card">
         <button onClick={() => setCount((count) => count + 1)}>
           count is {count}
