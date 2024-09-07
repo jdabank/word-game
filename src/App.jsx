@@ -45,7 +45,7 @@ function App() {
   return (
     <>
       <h1>{scrambledWord}</h1>
-      {!hint ?
+      {!hint && !victory?
       (<button className="hint" onClick={() => setHint(true)}>Need a hint?</button>)
       : <h4>{word[0]}{word[1]}***</h4>}
       {victory === false ?
